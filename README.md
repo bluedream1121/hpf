@@ -29,7 +29,7 @@ Beam search on SPair-71k validation set:
     
     
 Beam search on PF-PASCAL validation set: 
-
+    python beamsearch.py --dataset pfpascal --thres bbox --backbone vgg16
     python beamsearch.py --dataset pfpascal --thres bbox --backbone resnet50
     python beamsearch.py --dataset pfpascal --thres bbox --backbone resnet101  
     

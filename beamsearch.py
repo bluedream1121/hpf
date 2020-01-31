@@ -57,13 +57,20 @@ def beamsearch_hp(datapath, benchmark, backbone, thres, alpha, logpath,
     for base in candidate_base:
         start = time.time()
         hyperpixel = parse_layers(base)
-        score = evaluate.run(datapath, benchmark, backbone, thres, alpha,
-                             hyperpixel, logpath, True, model, dataloader)
-        log_evaluation(base, score, time.time() - start)
-        membuf_cand.append((score, base))
+        try:
+            score = evaluate.run(datapath, benchmark, backbone, thres, alpha,
+                            hyperpixel, logpath, True, model, dataloader)
+            log_evaluation(base, score, time.time() - start)
+            membuf_cand.append((score, base))
+        except RuntimeError:
+            print('CUDA out of memory', base  ,'th layer!' )
     membuf_topk = find_topk(membuf_cand, beamsize)
     score_sel, layer_sel = find_topk(membuf_cand, 1)[0]
     log_selected(0, membuf_topk)
+
+    print(membuf_topk, score_sel, layer_sel)
+    print(membuf_cand, beamsize)
+
 
     # 3. Proceed iterative search
     for depth in range(1, maxdepth):
@@ -110,7 +117,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # 1. Candidate layers for hyperpixel initialization
-    n_layers = {'resnet50': 17, 'resnet101': 34, 'fcn101': 34}
+    n_layers = {'vgg16': 13, 'resnet50': 17, 'resnet101': 34, 'fcn101': 34}
     candidate_base = [[i] for i in range(args.beamsize)]
     candidate_layers = list(range(n_layers[args.backbone]))
 

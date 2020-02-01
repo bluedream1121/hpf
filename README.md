@@ -48,7 +48,7 @@ Results on Caltech-101: (LT-ACC: 0.88, IoU: 0.64)
 
     python evaluate.py --dataset caltech --backbone resnet50 --hyperpixel '(2,7,11,12,13)'
 
-Results on SPair-71k: (PCK: 28.0%, 27.2%, 28.2%)
+Results on SPair-71k: (PCK: 27.6%, 27.2%, 28.2%)
     python evaluate.py --dataset spair --backbone vgg16 --hyperpixel '(4, 8, 9, 10, 11, 12)'
     python evaluate.py --dataset spair --backbone resnet50 --hyperpixel '(0,9,10,11,12,13)'
     python evaluate.py --dataset spair --backbone resnet101 --hyperpixel '(0,8,20,21,26,28,29,30)'

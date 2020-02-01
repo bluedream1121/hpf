@@ -34,8 +34,8 @@ Beam search on PF-PASCAL validation set:
     python beamsearch.py --dataset pfpascal --thres bbox --backbone resnet101  
     
     
-Results on PF-PASCAL: (PCK: 83.4%, 84.8%, 88.3%)
-
+Results on PF-PASCAL: (PCK: 77.1%, 83.4%, 84.8%, 88.3%)
+    python evaluate.py --dataset pfpascal --backbone vgg16 --hyperpixel '(4, 8, 10, 11, 12)'
     python evaluate.py --dataset pfpascal --backbone resnet50 --hyperpixel '(2,7,11,12,13)'
     python evaluate.py --dataset pfpascal --backbone resnet101 --hyperpixel '(2,17,21,22,25,26,28)'
     python evaluate.py --dataset pfpascal --backbone fcn101 --hyperpixel '(2,4,5,18,19,20,24,32)'
@@ -48,8 +48,8 @@ Results on Caltech-101: (LT-ACC: 0.88, IoU: 0.64)
 
     python evaluate.py --dataset caltech --backbone resnet50 --hyperpixel '(2,7,11,12,13)'
 
-Results on SPair-71k: (PCK: 27.2%, 28.2%)
- 
+Results on SPair-71k: (PCK: 28.0%, 27.2%, 28.2%)
+    python evaluate.py --dataset spair --backbone vgg16 --hyperpixel '(4, 8, 9, 10, 11, 12)'
     python evaluate.py --dataset spair --backbone resnet50 --hyperpixel '(0,9,10,11,12,13)'
     python evaluate.py --dataset spair --backbone resnet101 --hyperpixel '(0,8,20,21,26,28,29,30)'
     

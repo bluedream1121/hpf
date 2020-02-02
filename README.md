@@ -63,7 +63,15 @@ Results on SPair-71k: (PCK: 26.0%, 27.6%, 29.3%, 27.2%, 28.2%)
 To visualize predictions using TPS transformation, add command line argument **--visualize**: 
 
     python evaluate.py --visualize
-    
+
+
+resnet18 rfs 계산 https://fomoro.com/research/article/receptive-field-calculator#7,2,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;1,2,1,VALID;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;1,2,1,VALID;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;1,2,1,VALID;3,1,1,SAME;3,1,1,SAME\
+
+
+vgg16 rfs 계산 : https://fomoro.com/research/article/receptive-field-calculator#3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME
+
+resnet34 계산 https://fomoro.com/research/article/receptive-field-calculator#7,2,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME
+
 ### Bibtex
 If you use this code and SPair-71k dataset for your research, please consider citing:
 ````

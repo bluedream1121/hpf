@@ -25,6 +25,12 @@ class HyperpixelFlow:
         elif backbone == 'resnet101':
             self.backbone = resnet.resnet101(pretrained=True).to(device)
             nbottlenecks = [3, 4, 23, 3]
+        elif backbone == 'resnet18':
+            self.backbone = resnet.resnet18(pretrained=True).to(device)
+            nbottlenecks = [2, 2 ,2 ,2 ]
+        elif backbone == 'resnet34':
+            self.backbone = resnet.resnet34(pretrained=True).to(device) 
+            nbottlenecks = [3, 4, 6, 3]
         elif backbone == 'fcn101':
             self.backbone = gcv.models.get_fcn_resnet101_voc(pretrained=True).to(device).pretrained
             nbottlenecks = [3, 4, 23, 3]
@@ -51,15 +57,24 @@ class HyperpixelFlow:
         # Reference: https://fomoro.com/research/article/receptive-field-calculator
         # (the jump and receptive field sizes for 'fcn101' are heuristic values)
         self.hyperpixel_ids = util.parse_hyperpixel(hyperpixel_ids)
-        if 'vgg11' in self.backbone_name: ## total 13 backbone feature
+        if 'vgg11' in self.backbone_name: ## total 8 backbone feature
             self.jsz = torch.tensor([1, 2, 4, 4, 8, 8, 16, 16]).to(device)  
             self.rfsz = torch.tensor([3,8,18,26,46,62,102,134]).to(device)
-        if 'vgg16' in self.backbone_name: ## total 13 backbone feature
+        elif 'vgg16' in self.backbone_name: ## total 13 backbone feature
             self.jsz = torch.tensor([1, 1, 2, 2, 4, 4, 4, 8, 8, 8, 16, 16, 16]).to(device)  
             self.rfsz = torch.tensor([3, 5, 10, 14, 24, 32, 40, 60, 76, 92, 132, 164, 196]).to(device)
-        if 'vgg19' in self.backbone_name: ## total 13 backbone feature
+        elif 'vgg19' in self.backbone_name: ## total 19 backbone feature
             self.jsz = torch.tensor([1, 1, 2, 2, 4, 4, 4, 4, 8, 8, 8, 8, 16, 16, 16, 16]).to(device)  
             self.rfsz = torch.tensor([3, 5, 10, 14, 24, 32, 40, 48, 68, 84, 100, 116, 156, 188, 220, 256, 288]).to(device)
+        elif self.backbone_name == 'resnet18':
+            self.jsz = torch.tensor([4,4,4,8,8,16,16,32,32]).to(device)
+            # all "layers"
+            self.rfsz = torch.tensor([11,27,43,59,91,123,187,251,379]).to(device)
+            # all "feed-forwarding" aka transformation conv-relu
+            # self.rfsz = torch.tensor([7,11,19,27,35,43,51,59,59,75,91,107,123,123,155,187,219,251,251,315,379,443,507])
+        elif self.backbone_name == 'resnet34':
+            self.jsz = torch.tensor([4,4,4,4,8,8,8,8,16,16,16,16,16,16,32,32,32]).to(device)
+            self.rfsz = torch.tensor([11,27,43,59,83,15,147,179,227,291,355,419,483,547,643,771,899]).to(device)
         else:
             self.jsz = torch.tensor([4, 4, 4, 4, 8, 8, 8, 8, 16, 16]).to(device)
             self.rfsz = torch.tensor([11, 19, 27, 35, 43, 59, 75, 91, 107, 139]).to(device)
@@ -375,28 +390,52 @@ class HyperpixelFlow:
         if 0 in self.hyperpixel_ids:
             feats.append(feat.clone())
 
-        # Layer 1-4
-        for hid, (bid, lid) in enumerate(zip(self.bottleneck_ids, self.layer_ids)):
-            res = feat
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv1.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn1.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv2.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn2.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv3.forward(feat)
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn3.forward(feat)
+        if self.backbone_name == 'resnet18' or self.backbone_name == 'resnet34':
+            # Layer 1-4
+            for hid, (bid, lid) in enumerate(zip(self.bottleneck_ids, self.layer_ids)):
+                res = feat
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv1.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn1.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv2.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn2.forward(feat)
+                # feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
+                # feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv3.forward(feat)
+                # feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn3.forward(feat)
 
-            if bid == 0:
-                res = self.backbone.__getattr__('layer%d' % lid)[bid].downsample.forward(res)
+                if bid == 0 and lid > 1:
+                    res = self.backbone.__getattr__('layer%d' % lid)[bid].downsample.forward(res)
 
-            feat += res
+                feat += res
 
-            if hid + 1 in self.hyperpixel_ids:
-                feats.append(feat.clone())
-                if hid + 1 == max(self.hyperpixel_ids):
-                    break
-            feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
+                if hid + 1 in self.hyperpixel_ids:
+                    feats.append(feat.clone())
+                    if hid + 1 == max(self.hyperpixel_ids):
+                        break
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
+        elif self.backbone_name == 'resnet50' or self.backbone_name == 'resnet101':
+            # Layer 1-4
+            for hid, (bid, lid) in enumerate(zip(self.bottleneck_ids, self.layer_ids)):
+                res = feat
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv1.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn1.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv2.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn2.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].conv3.forward(feat)
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].bn3.forward(feat)
+
+                if bid == 0:
+                    res = self.backbone.__getattr__('layer%d' % lid)[bid].downsample.forward(res)
+
+                feat += res
+
+                if hid + 1 in self.hyperpixel_ids:
+                    feats.append(feat.clone())
+                    if hid + 1 == max(self.hyperpixel_ids):
+                        break
+                feat = self.backbone.__getattr__('layer%d' % lid)[bid].relu.forward(feat)
 
 
         # Up-sample & concatenate features to construct a hyperimage
@@ -406,7 +445,7 @@ class HyperpixelFlow:
             feats[idx] = F.interpolate(feat, tuple(feats[0].size()[2:]), None, 'bilinear', True)
         feats = torch.cat(feats, dim=1)
 
-        print(feats.shape, rfsz, jsz)
+        # print(feats.shape, rfsz, jsz)
 
 
         return feats[0], rfsz, jsz

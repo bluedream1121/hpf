@@ -35,11 +35,13 @@ Beam search on PF-PASCAL validation set:
     python beamsearch.py --dataset pfpascal --thres bbox --backbone resnet101  
     
     
-Results on PF-PASCAL: (PCK: 76.9%, 77.1%, 79.4%, 83.4%, 84.8%, 88.3%)
+Results on PF-PASCAL: (PCK: 76.9%, 77.1%, 79.4%, / 79.0%, 83.5% , 83.4%, 84.8%, 88.3%)
 
     python evaluate.py --dataset pfpascal --backbone vgg11 --hyperpixel '(1, 3, 5, 6, 7)'
     python evaluate.py --dataset pfpascal --backbone vgg16 --hyperpixel '(4, 8, 10, 11, 12)'
     python evaluate.py --dataset pfpascal --backbone vgg19 --hyperpixel '(4, 7, 10, 11, 12, 13, 14, 15)'
+    python evaluate.py --dataset pfpascal --backbone resnet18 --hyperpixel '(1,5,6)'
+    python evaluate.py --dataset pfpascal --backbone resnet34 --hyperpixel '(1, 6, 10, 11, 12, 13)'
     python evaluate.py --dataset pfpascal --backbone resnet50 --hyperpixel '(2,7,11,12,13)'
     python evaluate.py --dataset pfpascal --backbone resnet101 --hyperpixel '(2,17,21,22,25,26,28)'
     python evaluate.py --dataset pfpascal --backbone fcn101 --hyperpixel '(2,4,5,18,19,20,24,32)'
@@ -52,18 +54,28 @@ Results on Caltech-101: (LT-ACC: 0.88, IoU: 0.64)
 
     python evaluate.py --dataset caltech --backbone resnet50 --hyperpixel '(2,7,11,12,13)'
 
-Results on SPair-71k: (PCK: 26.0%, 27.6%, 29.3%, 27.2%, 28.2%)
+Results on SPair-71k: (PCK: 26.0%, 27.6%, 29.3%, / 22.5%, 26.1%, 27.2%, 28.2%)
 
     python evaluate.py --dataset spair --backbone vgg11 --hyperpixel '(1, 4, 5, 6, 7)'
     python evaluate.py --dataset spair --backbone vgg16 --hyperpixel '(4, 8, 9, 10, 11, 12)'
     python evaluate.py --dataset spair --backbone vgg19 --hyperpixel '(4, 10, 11, 12, 13, 14, 15)'
+    python evaluate.py --dataset spair --backbone resnet18 --hyperpixel '(0, 4, 5, 6)'
+    python evaluate.py --dataset spair --backbone resnet34 --hyperpixel '(0, 8, 10, 11, 12, 13)'
     python evaluate.py --dataset spair --backbone resnet50 --hyperpixel '(0,9,10,11,12,13)'
     python evaluate.py --dataset spair --backbone resnet101 --hyperpixel '(0,8,20,21,26,28,29,30)'
     
 To visualize predictions using TPS transformation, add command line argument **--visualize**: 
 
     python evaluate.py --visualize
-    
+
+
+resnet18 rfs 계산 https://fomoro.com/research/article/receptive-field-calculator#7,2,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;1,2,1,VALID;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;1,2,1,VALID;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;1,2,1,VALID;3,1,1,SAME;3,1,1,SAME\
+
+
+vgg16 rfs 계산 : https://fomoro.com/research/article/receptive-field-calculator#3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;2,2,1,SAME
+
+resnet34 계산 https://fomoro.com/research/article/receptive-field-calculator#7,2,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,2,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME;3,1,1,SAME
+
 ### Bibtex
 If you use this code and SPair-71k dataset for your research, please consider citing:
 ````

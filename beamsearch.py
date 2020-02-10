@@ -117,7 +117,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # 1. Candidate layers for hyperpixel initialization
-    n_layers = {'vgg16': 13, 'resnet50': 17, 'resnet101': 34, 'fcn101': 34}
+    n_layers = {'vgg11': 8,'vgg16': 13, 'vgg19': 16, 'resnet18': 9, 'resnet34': 17, 'resnet50': 17, 'resnet101': 34, 'fcn101': 34}
     candidate_base = [[i] for i in range(args.beamsize)]
     candidate_layers = list(range(n_layers[args.backbone]))
 

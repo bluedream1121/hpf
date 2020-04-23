@@ -2,3 +2,5 @@
 logs/
 .ipynb_checkpoints/
 eval_script_0202.sh
+*hseq.pdf
+cache*

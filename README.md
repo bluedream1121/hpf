@@ -33,7 +33,15 @@ Beam search on PF-PASCAL validation set:
     python beamsearch.py --dataset pfpascal --thres bbox --backbone vgg16
     python beamsearch.py --dataset pfpascal --thres bbox --backbone resnet50
     python beamsearch.py --dataset pfpascal --thres bbox --backbone resnet101  
-    
+
+Beam search on HPatches set: 
+
+    python beamsearch.py --dataset hpatches --thres bbox --backbone vgg16
+    python beamsearch.py --dataset hpatches --thres bbox --backbone resnet50
+    python beamsearch.py --dataset hpatches --thres bbox --backbone resnet101  
+
+
+Results on HPatches:
     
 Results on PF-PASCAL: (PCK: 76.9%, 77.1%, 79.4%, / 79.0%, 83.5% , 83.4%, 84.8%, 88.3%)
 

@@ -14,6 +14,8 @@ from model import hpflow
 from model import util
 import evaluate
 
+from data.hpatches import HPatchesDataset
+
 
 def parse_layers(layer_ids):
     r"""Parse list of layer ids (int) into string format"""
@@ -48,9 +50,15 @@ def beamsearch_hp(datapath, benchmark, backbone, thres, alpha, logpath,
     # 1. Model, and dataset initialization
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = hpflow.HyperpixelFlow(backbone, '0', benchmark, device)
-    download.download_dataset(os.path.abspath(datapath), benchmark)
-    dset = download.load_dataset(benchmark, datapath, thres, device, 'val')
-    dataloader = DataLoader(dset, batch_size=1, num_workers=0)
+    if benchmark == 'hpatches':
+        # method = 'hpf_'+ '_' + args.backbone + '_' + str(args.hyperpixel) + '_' + str(args.exp_id)
+        dataset_path = '/home/jongmin/datasets/hpatches-sequences/hpatches-sequences-release'
+        dset = HPatchesDataset(dataset_path, device)
+        dataloader = dset
+    else:
+        download.download_dataset(os.path.abspath(datapath), benchmark)
+        dset = download.load_dataset(benchmark, datapath, thres, device, 'val')
+        dataloader = DataLoader(dset, batch_size=1, num_workers=0)
 
     # 2. Search for the k-best base layers
     membuf_cand = []

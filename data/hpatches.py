@@ -65,18 +65,18 @@ class HPatchesDataset(Dataset):
         return img.squeeze(0)
         # return img.squeeze(0), img_downsample, inter_ratio
 
-    def resize(self, img, side_thres=300):
-        r"""Resize given image with imsize: (1, 3, H, W)"""
-        imsize = torch.tensor(img.size()).float()
-        side_max = torch.max(imsize)
-        inter_ratio = 1.0
-        if side_max > side_thres:
-            inter_ratio = side_thres / side_max
-            img = F.interpolate(img,
-                                size=(int(imsize[2] * inter_ratio), int(imsize[3] * inter_ratio)),
-                                mode='bilinear',
-                                align_corners=False)
-        return img.squeeze(0), inter_ratio
+    # def resize(self, img, side_thres=300):
+    #     r"""Resize given image with imsize: (1, 3, H, W)"""
+    #     imsize = torch.tensor(img.size()).float()
+    #     side_max = torch.max(imsize)
+    #     inter_ratio = 1.0
+    #     if side_max > side_thres:
+    #         inter_ratio = side_thres / side_max
+    #         img = F.interpolate(img,
+    #                             size=(int(imsize[2] * inter_ratio), int(imsize[3] * inter_ratio)),
+    #                             mode='bilinear',
+    #                             align_corners=False)
+    #     return img.squeeze(0), inter_ratio
 
 def summary_hpatches(stats, n_i, n_v):
     seq_type, n_feats, n_matches = stats
@@ -88,7 +88,7 @@ def summary_hpatches(stats, n_i, n_v):
     )
 
 
-def resize_img(img, side_thres=300):
+def resize_img(img, side_thres=600):
     r"""Resize given image with imsize: (1, 3, H, W)"""
     imsize = torch.tensor(img.size()).float()
     side_max = torch.max(imsize)

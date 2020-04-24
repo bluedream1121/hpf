@@ -37,11 +37,18 @@ Beam search on PF-PASCAL validation set:
 Beam search on HPatches set: 
 
     python beamsearch.py --dataset hpatches --thres bbox --backbone vgg16
+    python beamsearch.py --dataset hpatches --thres bbox --backbone vgg19
     python beamsearch.py --dataset hpatches --thres bbox --backbone resnet50
     python beamsearch.py --dataset hpatches --thres bbox --backbone resnet101  
 
 
 Results on HPatches:
+    python evaluate.py --dataset hpatches --backbone vgg16 --hyperpixel '(4, 5, 7, 8, 9, 10, 11, 12)' --exp_id rsz600
+    python evaluate.py --dataset hpatches --backbone vgg19 --hyperpixel '(4, 5, 8, 11, 12, 15)' --exp_id rsz600
+    python evaluate.py --dataset hpatches --backbone resnet50 --hyperpixel '(3, 7, 11)' --exp_id rsz600
+    python evaluate.py --dataset hpatches --backbone resnet101 --hyperpixel '(3, 7, 21)' --exp_id rsz600
+
+
     
 Results on PF-PASCAL: (PCK: 76.9%, 77.1%, 79.4%, / 79.0%, 83.5% , 83.4%, 84.8%, 88.3%)
 

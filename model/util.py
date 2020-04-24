@@ -38,7 +38,7 @@ def log_args(args):
     logging.info('+================================================+\n')
 
 
-def resize(img, kps, side_thres=300):
+def resize(img, kps, side_thres=600):
     r"""Resize given image with imsize: (1, 3, H, W)"""
     imsize = torch.tensor(img.size()).float()
     kps = kps.float()

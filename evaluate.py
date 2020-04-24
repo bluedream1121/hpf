@@ -36,6 +36,8 @@ def run(datapath, benchmark, backbone, thres, alpha, hyperpixel,
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if benchmark == 'hpatches':
         method = 'hpf_'+ '_' + backbone + '_' + str(hyperpixel) #+ '_' + str(args.exp_id)
+        if not beamsearch:
+            method += '_' + str(args.exp_id)
         dataset_path = '/home/jongmin/datasets/hpatches-sequences/hpatches-sequences-release'
         if dataloader is None:
             # method = 'hpf_'+ '_' + args.backbone + '_' + str(args.hyperpixel) + '_' + str(args.exp_id)

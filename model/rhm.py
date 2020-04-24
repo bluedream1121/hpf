@@ -52,18 +52,18 @@ def rhm(src_hyperpixels, trg_hyperpixels, hsfilter, ncells=8192):
 
     # Prepare for the voting procedure
     votes = appearance_similarity(src_hpfeats, trg_hpfeats)
-    nbins_x, nbins_y, hs_cellsize = build_hspace(src_imsize, trg_imsize, ncells)
-    bin_ids = hspace_bin_ids(src_imsize, src_hpgeomt, trg_hpgeomt, hs_cellsize, nbins_x)
-    hspace = src_hpgeomt.new_zeros((len(votes), nbins_y * nbins_x))
+    # nbins_x, nbins_y, hs_cellsize = build_hspace(src_imsize, trg_imsize, ncells)
+    # bin_ids = hspace_bin_ids(src_imsize, src_hpgeomt, trg_hpgeomt, hs_cellsize, nbins_x)
+    # hspace = src_hpgeomt.new_zeros((len(votes), nbins_y * nbins_x))
 
-    # Proceed voting
-    hbin_ids = bin_ids.add(torch.arange(0, len(votes)).to(src_hpgeomt.device).
-                           mul(hspace.size(1)).unsqueeze(1).expand_as(bin_ids))
-    hspace = hspace.view(-1).index_add(0, hbin_ids.view(-1), votes.view(-1)).view_as(hspace)
-    hspace = torch.sum(hspace, dim=0)
+    # # Proceed voting
+    # hbin_ids = bin_ids.add(torch.arange(0, len(votes)).to(src_hpgeomt.device).
+    #                        mul(hspace.size(1)).unsqueeze(1).expand_as(bin_ids))
+    # hspace = hspace.view(-1).index_add(0, hbin_ids.view(-1), votes.view(-1)).view_as(hspace)
+    # hspace = torch.sum(hspace, dim=0)
 
-    # Aggregate the voting results
-    hspace = F.conv2d(hspace.view(1, 1, nbins_y, nbins_x),
-                      hsfilter.unsqueeze(0).unsqueeze(0), padding=3).view(-1)
+    # # Aggregate the voting results
+    # hspace = F.conv2d(hspace.view(1, 1, nbins_y, nbins_x),
+    #                   hsfilter.unsqueeze(0).unsqueeze(0), padding=3).view(-1)
 
-    return votes * torch.index_select(hspace, dim=0, index=bin_ids.view(-1)).view_as(votes)
+    return votes #* torch.index_select(hspace, dim=0, index=bin_ids.view(-1)).view_as(votes)
